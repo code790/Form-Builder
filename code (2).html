@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Builder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .instructions {
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #e9f7ef;
+      border: 1px solid #d4edda;
+      border-radius: 5px;
+      color: #155724;
+    }
+    .toolbar {
+      margin-bottom: 20px;
+    }
+    .toolbar input {
+      margin-right: 10px;
+      padding: 5px;
+      font-size: 14px;
+    }
+    .toolbar button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .toolbar button:hover {
+      background-color: #0056b3;
+    }
+    .form-preview {
+      border: 1px dashed #ccc;
+      padding: 20px;
+      min-height: 200px;
+      margin-bottom: 20px;
+      background-color: #fafafa;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    .email-input {
+      margin-bottom: 20px;
+    }
+    .email-input label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .email-input input {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>HTML Form Builder</h1>
+    <div class="instructions">
+      <p><strong>Instructions:</strong></p>
+      <ol>
+        <li>Enter your <a href="https://formspree.io/">Formspree</a> email or endpoint in the email input box.</li>
+        <li>Enter a label for the field you want to add.</li>
+        <li>Click the buttons to add the desired fields (e.g., text input, checkbox).</li>
+        <li>The form preview will update in real-time.</li>
+        <li>Copy the generated HTML code and embed it on your website.</li>
+      </ol>
+    </div>
+    <div class="email-input">
+      <label for="email">Enter your Formspree endpoint email:</label>
+      <input type="email" id="email" placeholder="e.g., example@example.com" />
+    </div>
+    <div class="toolbar">
+      <input type="text" id="field-label" placeholder="Enter field label" />
+      <button onclick="addField('text')">Add Text Input</button>
+      <button onclick="addField('checkbox')">Add Checkbox</button>
+      <button onclick="addField('radio')">Add Radio Button</button>
+      <button onclick="addField('textarea')">Add Textarea</button>
+    </div>
+    <div class="form-preview" id="form-preview">
+      <!-- Form preview will appear here -->
+    </div>
+    <h3>Generated HTML Code:</h3>
+    <textarea id="generated-code" readonly></textarea>
+  </div>
+  <script>
+    function addField(type) {
+      const preview = document.getElementById('form-preview');
+      const labelInput = document.getElementById('field-label');
+      const labelText = labelInput.value.trim() || 'Untitled Field';
+
+      let element = '';
+
+      if (type === 'text') {
+        element = `<div><label>${labelText}:</label><input type="text" name="${labelText.replace(/\\s+/g, '_').toLowerCase()}" /></div>`;
+      } else if (type === 'checkbox') {
+        element = `<div><label><input type="checkbox" name="${labelText.replace(/\\s+/g, '_').toLowerCase()}" /> ${labelText}</label></div>`;
+      } else if (type === 'radio') {
+        element = `<div><label><input type="radio" name="radio_group" /> ${labelText}</label></div>`;
+      } else if (type === 'textarea') {
+        element = `<div><label>${labelText}:</label><textarea name="${labelText.replace(/\\s+/g, '_').toLowerCase()}"></textarea></div>`;
+      }
+
+      // Append the element to the preview pane
+      preview.innerHTML += element;
+
+      // Update the generated code
+      updateGeneratedCode();
+    }
+
+    function updateGeneratedCode() {
+      const preview = document.getElementById('form-preview');
+      const email = document.getElementById('email').value.trim();
+      const action = email
+        ? `https://formspree.io/f/${email}`
+        : '#';
+
+      const formCode = `
+<form action="${action}" method="POST">
+  ${preview.innerHTML.trim()}
+  <button type="submit">Submit</button>
+</form>`.trim();
+
+      document.getElementById('generated-code').value = formCode;
+    }
+
+    document.getElementById('email').addEventListener('input', updateGeneratedCode);
+  </script>
+<p>this form builder was created with the help of formspree</p>
+</body>
+</html>
