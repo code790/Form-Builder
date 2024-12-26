@@ -31,6 +31,13 @@
       border-radius: 5px;
       color: #155724;
     }
+    .instructions a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .instructions a:hover {
+      text-decoration: underline;
+    }
     .toolbar {
       margin-bottom: 20px;
     }
@@ -64,19 +71,28 @@
       font-family: monospace;
       font-size: 14px;
     }
-    .email-input {
+    .endpoint-input {
       margin-bottom: 20px;
     }
-    .email-input label {
+    .endpoint-input label {
       display: block;
       margin-bottom: 5px;
     }
-    .email-input input {
+    .endpoint-input input {
       width: 100%;
       padding: 10px;
       font-size: 14px;
       border: 1px solid #ccc;
       border-radius: 5px;
+    }
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      padding: 10px;
+      background-color: #f1f1f1;
+      font-size: 14px;
+      color: #333;
+      border-top: 1px solid #ccc;
     }
   </style>
 </head>
@@ -86,16 +102,17 @@
     <div class="instructions">
       <p><strong>Instructions:</strong></p>
       <ol>
-        <li>Enter your <a href="https://formspree.io/">Formspree</a> email or endpoint in the email input box.</li>
+        <li>Enter your Basin form endpoint URL in the input box.</li>
         <li>Enter a label for the field you want to add.</li>
-        <li>Click the buttons to add the desired fields (e.g., text input, checkbox).</li>
+        <li>Click the buttons to add desired fields (e.g., text input, checkbox).</li>
         <li>The form preview will update in real-time.</li>
         <li>Copy the generated HTML code and embed it on your website.</li>
       </ol>
+      <p>Need a form endpoint? Get started with Basin by visiting <a href="https://usebasin.com" target="_blank">Basin</a>.</p>
     </div>
-    <div class="email-input">
-      <label for="email">Enter your Formspree endpoint email:</label>
-      <input type="email" id="email" placeholder="e.g., example@example.com" />
+    <div class="endpoint-input">
+      <label for="endpoint">Enter your Basin form endpoint URL:</label>
+      <input type="url" id="endpoint" placeholder="e.g., https://usebasin.com/f/your-endpoint" />
     </div>
     <div class="toolbar">
       <input type="text" id="field-label" placeholder="Enter field label" />
@@ -110,6 +127,11 @@
     <h3>Generated HTML Code:</h3>
     <textarea id="generated-code" readonly></textarea>
   </div>
+
+  <footer>
+    <p>This form builder was made possible thanks to <a href="https://usebasin.com" target="_blank">Basin</a>.</p>
+  </footer>
+
   <script>
     function addField(type) {
       const preview = document.getElementById('form-preview');
@@ -137,10 +159,8 @@
 
     function updateGeneratedCode() {
       const preview = document.getElementById('form-preview');
-      const email = document.getElementById('email').value.trim();
-      const action = email
-        ? `https://formspree.io/f/${email}`
-        : '#';
+      const endpoint = document.getElementById('endpoint').value.trim();
+      const action = endpoint || '#';
 
       const formCode = `
 <form action="${action}" method="POST">
@@ -151,8 +171,7 @@
       document.getElementById('generated-code').value = formCode;
     }
 
-    document.getElementById('email').addEventListener('input', updateGeneratedCode);
+    document.getElementById('endpoint').addEventListener('input', updateGeneratedCode);
   </script>
-<p>this form builder was created with the help of formspree</p>
 </body>
 </html>
